@@ -2,42 +2,31 @@ import { getProduct } from "../products.api";
 import {
   Card,
   CardContent,
-  CardFooter,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import ProductForm from "@/components/products/product-form";
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 export default async function DetailProduct({ params }: Props) {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
 
   return (
     <div className="h-screen flex items-center justify-center">
       <Card>
         <CardHeader>
-          <CardTitle className="flex justify-between">
-            {product.name}
-            <span className="text-sm font-bold text-gray-500">
-              ${product.price}
-            </span>
-          </CardTitle>
+          <CardTitle>Edita tu producto</CardTitle>
+          <CardDescription>Modifica tu producto.</CardDescription>
         </CardHeader>
-        <Image src="/globe.svg" alt={product.name} width={200} height={200} />
         <CardContent>
-          <p>{product.description}</p>
+          <ProductForm product={product} />
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button className="mt-4">Comprar</Button>
-          <Button className="mt-4" variant="destructive">
-            Eliminar
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );

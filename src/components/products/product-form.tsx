@@ -4,15 +4,30 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { createProduct } from "../../app/products/products.api";
+import { createProduct, updateProduct } from "../../app/products/products.api";
 import { useRouter } from "next/navigation";
+import { parse } from "path";
 
-function ProductForm() {
-  const { register, handleSubmit } = useForm();
+function ProductForm({ product }: any) {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: product?.name || "",
+      price: product?.price || "",
+      description: product?.description || "",
+      image: product?.image || "",
+    },
+  });
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
-    await createProduct({ ...data, price: parseFloat(data.price) });
+    if (product) {
+      await updateProduct(product.id, {
+        ...data,
+        price: parseFloat(data.price),
+      });
+    } else {
+      await createProduct({ ...data, price: parseFloat(data.price) });
+    }
     router.push("/");
   });
 
@@ -49,7 +64,7 @@ function ProductForm() {
           <Button onClick={handleCancel} variant="outline" type="reset">
             Cancel
           </Button>
-          <Button type="submit">Create</Button>
+          <Button type="submit">{product ? "Update" : "Create"}</Button>
         </div>
       </div>
     </form>

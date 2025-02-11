@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import ProductForm from "../../../components/products/product-form";
 
-export default function NewProduct() {
+export default function NewProduct({ params }: any) {
   return (
     <div className="h-screen flex items-center justify-center">
       <Card>
@@ -17,7 +17,7 @@ export default function NewProduct() {
           <CardDescription>Crea tu producto.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ProductForm />
+          <ProductForm product={null} />
         </CardContent>
       </Card>
     </div>
